@@ -1,16 +1,14 @@
+//import env variables from .env file
 
-const {
-    GoogleGenerativeAI,
-    HarmCategory,
-    HarmBlockThreshold,
-  } = require("@google/generative-ai");
+
+import {GoogleGenerativeAI} from "@google/generative-ai"
   
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = GEMINI_API_KEY;
   const genAI = new GoogleGenerativeAI(apiKey);
   
   const model = genAI.getGenerativeModel({
-    model: "gemini-1.5-flash",
-  });
+    model: "gemini-1.5-pro",
+  }); 
   
   const generationConfig = {
     temperature: 1,
@@ -20,15 +18,17 @@ const {
     responseMimeType: "text/plain",
   };
   
-  async function run() {
+  async function run(prompt) {
     const chatSession = model.startChat({
       generationConfig,
       history: [
       ],
     });
   
-    const result = await chatSession.sendMessage("INSERT_INPUT_HERE");
-    console.log(result.response.text());
+    const result = await chatSession.sendMessage(prompt);
+    const response = result.response;
+    console.log(response.text());
+    return response.text();
   }
   
-  run();
+  export default run;
